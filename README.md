@@ -67,7 +67,7 @@ python manage.py createsuperuser
 5.Start the development server:
 python manage.py runserver
 
-6.Access the application in your web browser at http://localhost:8000/.
+6.Access the application in your web browser at http://127.0.0.1:8000/.
 
 
 USAGE
