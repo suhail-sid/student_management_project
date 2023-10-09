@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+   {% load static %}
+   {% load active_link_tags %}
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+      <title>College - Dashboard</title>
+      <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}">
+      <link rel="stylesheet" href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}">
+      <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}">
+      <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}">
+      <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+         <!--  datatable -->
+       <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+       <link rel="stylesheet" href="{% static 'assets/plugins/datatables/datatables.min.css' %}">
+
+   </head>
+   <body>
+      <div class="main-wrapper">
+         <div class="header">
+            <div class="header-left">
+               <a href="index.html" class="logo">
+               <img src="{% static 'assets/img/logo.png' %}" alt="Logo">
+               </a>
+               <a href="index.html" class="logo logo-small">
+               <img src="{% static '#' %}" alt="Logo" width="30" height="30">
+               </a>
+            </div>
+             <a href="#" id="toggle_btn">
+             <i class="fas fa-align-left"></i>
+             </a>
+             <a class="mobile_btn" id="mobile_btn">
+             <i class="fas fa-bars"></i>
+             </a>
+             <ul class="nav user-menu">
+                <li class="nav-item dropdown has-arrow">
+                   <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                     {% if user.profile_pic == "" %}
+                     <span class="user-img"><img class="rounded-circle" src="{% static 'assets/img/login.jpg' %}"  width="31"></span>
+                     {% else %}
+                   <span class="user-img"><img class="rounded-circle" src="/{{user.profile_pic}}"  width="31"></span>
+                     {% endif %}
+                   </a>
+                   <div class="dropdown-menu">
+                      <div class="user-header">
+                         <div class="avatar avatar-sm">
+                           {% if user.profile_pic == "" %}
+                            <img src="{% static 'assets/img/login.jpg' %}" alt="User Image" class="avatar-img rounded-circle">
+                           {% else %}
+                            <img src="/{{user.profile_pic}}" alt="User Image" class="avatar-img rounded-circle">
+                            {% endif %}
+                         </div>
+                         <div class="user-text">
+                            <h6>{{user.first_name}} {{user.last_name}}</h6>
+                            {% if user.user_type == '1' %}
+                            <p class="text-muted mb-0">HOD(Head Of Department)</p>
+                            {% elif user.user_type == '2' %}
+                            <p class="text-muted mb-0">Staff</p>
+                            {% elif user.user_type == '3' %}
+                            <p class="text-muted mb-0">Student</p>
+                            {% endif %}
+                         </div>
+                      </div>
+                      <a class="dropdown-item" href="{% url 'profile' %}">My Profile Update</a>
+                      <a class="dropdown-item" href="{% url 'dologout' %}">Logout</a>
+                   </div>
+                </li>
+             </ul>
+         </div>
+
+
+         <!-- ------------------------------------------------------------Sidebar -->
+
+
+         <div class="sidebar" id="sidebar">
+            <div class="sidebar-inner slimscroll">
+               <div id="sidebar-menu" class="sidebar-menu">
+                  {% if user.user_type == '1' %}
+                  <ul>
+                     <li class="menu-title">
+                        <span>Main Menu</span>
+                     </li>
+                     <li class="{% active_link 'hod_home' 'active' %}">
+                       <a href="{% url 'hod_home' %}"><i class="fas fa-user-graduate"></i> <span>Dashboard</span></a>
+                     </li>
+                     <li class="submenu {% active_link 'view_student' 'active' %} {% active_link 'add_student' 'active' %}">
+                        <a href="#"><i class="fas fa-user-graduate"></i> <span>Students</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                           <li><a href="{% url 'view_student' %}">View Student</a></li>
+                           <li><a href="{% url 'add_student'%}">Add Student</a></li>
+                        </ul>
+                     </li>
+                     <li class="submenu {% active_link 'view_staff' 'active' %} {% active_link 'add_staff' 'active' %}">
+                        <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Staff</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                           <li><a href="{% url 'view_staff' %}">View Staff</a></li>
+                           <li><a href="{% url 'add_staff' %}">Add Staff </a></li>
+                        </ul>
+                     </li>
+                     <li class="submenu {% active_link 'view_course' 'active' %} {% active_link 'add_course' 'active' %}">
+                        <a href="#"><i class="fa fa-graduation-cap"></i> <span> Courses</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                           <li><a href="{% url 'view_course' %}">Course List</a></li>
+                           <li><a href="{% url 'add_course' %}">Add Course </a></li>  
+                        </ul>
+                     </li>
+                     <li class="submenu {% active_link 'view_subject' 'active' %} {% active_link 'add_subject' 'active' %}">
+                        <a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                           <li><a href="{% url 'view_subject' %}">Subject List</a></li>
+                           <li><a href="{% url 'add_subject' %}">Add Subject </a></li> 
+                        </ul>
+                     </li>
+                     <li class="submenu {% active_link 'view_session' 'active' %} {% active_link 'add_session' 'active' %}">
+                        <a href="#"><i class="fa fa-clock"></i> <span> Sessions</span> <span class="menu-arrow"></span></a>
+                        <ul>
+                           <li><a href="{% url 'view_session' %}">Session List</a></li>
+                           <li><a href="{% url 'add_session' %}">Add Session </a></li> 
+                        </ul>
+                     </li>
+                     <li  class="{% active_link 'staff_send_notification' 'active' %}">
+                       <a href="{% url 'staff_send_notification' %}"><i class="fa fa-bell"></i> <span> Send Staff Notification</span></a>
+                     </li>
+                     <li  class="{% active_link 'student_send_notification' 'active' %}">
+                       <a href="{% url 'student_send_notification' %}"><i class="fa fa-bell"></i> <span> Send Student Notification</span></a>
+                     </li>
+                     <li  class="{% active_link 'view_attendance' 'active' %}">
+                       <a href="{% url 'view_attendance' %}"><i class="fa fa-calendar-alt"></i> <span> View Attendance</span></a>
+                     </li>
+                     <li class="{% active_link 'staff_feedback_reply' 'active' %}">
+                       <a href="{% url 'staff_feedback_reply' %}"><i class="fas fa-comments"></i> <span> Staff Feedback</span></a>
+                     </li>
+                     <li class="{% active_link 'student_feedback_reply' 'active' %}">
+                       <a href="{% url 'student_feedback_reply' %}"><i class="fas fa-comments"></i> <span> Student Feedback</span></a>
+                     </li>
+                     <li class="{% active_link 'staff_leave_view' 'active' %}">
+                       <a href="{% url 'staff_leave_view' %}"><i class="fas fa-envelope"></i> <span> Staff Leave</span></a>
+                     </li>
+                     <li class="{% active_link 'student_leave_view' 'active' %}">
+                       <a href="{% url 'student_leave_view' %}"><i class="fas fa-envelope"></i> <span> Student Leave</span></a>
+                     </li>
+                     <li class="{% active_link '#' 'active' %}">
+                       <a href="{% url 'dologout' %}"><i class="fa fa-sign-out-alt"></i> <span> Logout</span></a>
+                     </li>
+                  </ul>
+
+
+                  {% elif user.user_type == '2' %}
+                  <ul>
+                     <li class="menu-title">
+                        <span>Main Menu</span>
+                     </li>
+                     <li class="{% active_link 'staff_home' 'active' %}">
+                       <a href="{% url 'staff_home' %}"><i class="fas fa-holly-berry"></i> <span>Dashboard</span></a>
+                     </li>
+                     <li class="{% active_link 'staff_take_attendance' 'active' %}">
+                       <a href="{% url 'staff_take_attendance' %}"><i class="fa fa-calendar-alt"></i> <span>Take Attendance</span></a>
+                     </li>
+                     <li class="{% active_link 'staff_view_attendance' 'active' %}">
+                       <a href="{% url 'staff_view_attendance' %}"><i class="fa fa-calendar-alt"></i> <span>View Attendance</span></a>
+                     </li>
+                     <li class="{% active_link 'staff_add_result' 'active' %}">
+                       <a href="{% url 'staff_add_result' %}"><i class="fas fa-poll-h"></i> <span>Add Result</span></a>
+                     </li>
+                     <li class="{% active_link 'staff_apply_leave' 'active' %}">
+                       <a href="{% url 'staff_apply_leave' %}"><i class="fas fa-envelope-open"></i> <span>Apply Leave</span></a>
+                     </li>
+                     <li class="{% active_link 'staff_send_feedback' 'active' %}">
+                       <a href="{% url 'staff_send_feedback' %}"><i class="fas fa-comment"></i> <span>Send Feedback</span></a>
+                     </li>
+                     <li class="{% active_link 'notifications' 'active' %}">
+                       <a href="{% url 'notifications' %}"><i class="fas fa-bell"></i> <span>Notifications</span></a>
+                     </li>
+                     <li class="{% active_link '#' 'active' %}">
+                        <a href="{% url 'dologout' %}"><i class="fa fa-sign-out-alt"></i> <span> Logout</span></a>
+                      </li>
+                  </ul>
+                     
+                  {% else %}
+                  <ul>
+                     <li class="menu-title">
+                        <span>Main Menu</span>
+                     </li>
+                     <li class="{% active_link 'student_home' 'active' %}">
+                       <a href="{% url 'student_home' %}"><i class="fas fa-holly-berry"></i> <span>Dashboard</span></a>
+                     </li>
+                     <li class="{% active_link 'student_view_attendance' 'active' %}">
+                       <a href="{% url 'student_view_attendance' %}"><i class="fas fa-calendar"></i> <span>View Attendance</span></a>
+                     </li>
+                     <li class="{% active_link 'student_view_result' 'active' %}">
+                       <a href="{% url 'student_view_result' %}"><i class="fas fa-poll"></i> <span>View Result</span></a>
+                     </li>
+                     <li class="{% active_link 'student_apply_leave' 'active' %}">
+                       <a href="{% url 'student_apply_leave' %}"><i class="fas fa-envelope-open"></i> <span>Apply For Leave</span></a>
+                     </li>
+                     <li class="{% active_link 'student_send_feedback' 'active' %}">
+                       <a href="{% url 'student_send_feedback' %}"><i class="fas fa-comment"></i> <span>Send Feedback</span></a>
+                     </li>
+                     <li class="{% active_link 'student_notification' 'active' %}">
+                       <a href="{% url 'student_notification' %}"><i class="fas fa-bell"></i> <span>Notifications</span></a>
+                     </li>
+                     <li class="{% active_link '#' 'active' %}">
+                        <a href="{% url 'dologout' %}"><i class="fa fa-sign-out-alt"></i> <span> Logout</span></a>
+                      </li>
+                  </ul>
+                  
+                  {% endif %}
+
+               </div>
+            </div>
+        </div>
+         <div class="page-wrapper">
+            <div class="content container-fluid">
+            
+               {% block content %}
+              
+        
+               {% endblock content %}
+
+               <footer>
+                  <p>Copyright © 2023 Suhail Siddiqui</p>
+              </footer>
+            </div>
+            
+         </div>
+      </div>
+      
+    
+    <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'assets/js/popper.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/apexchart/apexcharts.min.js' %}"></script>
+    <script src="{% static 'assets/plugins/apexchart/chart-data.js' %}"></script>
+    <script src="{% static 'assets/js/script.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="{% static 'assets/plugins/datatables/datatables.min.js'%}"></script>
+   <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+   <script type="text/javascript">
+   $(document).ready(function () {
+   $('#table_id').dataTable();
+   });
+</script>   
+ </body>
+ 
+</html>
